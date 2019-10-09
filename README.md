@@ -4,7 +4,7 @@ This repositoty contains source packages for R package bcops.
 
 ## Installation:
 library(devtools)
-install_github("Displayr/flipPlots")
+install_github("LeyingGuan/BCOPS/bcops")
 library(bcops)
 
 ## Overview
