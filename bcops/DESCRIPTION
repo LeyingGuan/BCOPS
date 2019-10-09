@@ -1,0 +1,16 @@
+Package: bcops
+Type: Package
+Title: BCOPS (balanced&conformal optimal prediction set)
+Version: 0.1.0
+Author: Leying Guan, Rob Tibshirani
+Maintainer: Leying Guan <leying.guan@yale.edu>
+Description: Perform BCOPS for classification problems when the unlabeled test data are available. 
+    BCOPS is a model-free classification approach that is good at both making accurate predictions and refrain from making predictions for test samples that are far from the training data, even in high dimension.
+License: GPL-2
+Depends: R (>= 3.5.0)
+Encoding: UTF-8
+LazyData: true
+LinkingTo: Rcpp
+Imports: Rcpp (>= 0.11.0), glmnet, MASS, Matrix, foreach, ranger, ks
+NeedsCompilation: yes
+RoxygenNote: 6.1.1
