@@ -2,12 +2,12 @@
 
 This repositoty contains source packages for R package bcops.
 
-Installation:
-
+## Installation:
 library(devtools)
 install_github("Displayr/flipPlots")
 library(bcops)
 
+## Overview
 There are 4 functions that the user can access in this package:
 
 BCOPS.train
