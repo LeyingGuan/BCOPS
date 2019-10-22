@@ -1,14 +1,15 @@
 #' Training BCOPs score functions with a user-specified classifier
-#' @param classifier a user-specified classifier. Note that the classifer can either takes input as feature matrix x and response y, or a dataframe contains features and response and a fomular.
-#' @param x features for the training data to feed-in BCOPS.
-#' @param y class labels from the training data to feed-in BCOPS.
-#' @param labels labels for the K classes.
-#' @param xte featuers for the test data to feed-in BCOS.
+#' @param classifier a user-specified classifier. Note that the classifier can either takes input as feature matrix x and response y, or a dataframe contains features and response and a formula.
+#' @param x n by p feature matrix for the training data to be used in constructing $v_k(x)$.
+#' @param y length n class labels for the training data to be used in constructing $v_k(x)$.
+#' @param labels labels for the K training classes.
+#' @param xte m by p features for the test data to be used in constructing $v_k(x)$.
 #' @param formula boolean variable indicating if the classifier takes data argument as classifier(formula, data,...) or  classifier(x, y,...). The function ranger is an example of the former, and the function cv.glmnet is an example of the later.
 #' @param ... other arguments depending on the classifier. Note the argument is applied to the augmented data by stacking x and xte together when building a binary classifier.
 #' @return models a list trained models that is used for predict the BCOPs score for each new observation.
 #' @examples 
-#' data(minist); 
+#' \dontrun{
+#' data(mnist); 
 #' xtrain = mnist[['data']][['x']]; ytrain = mnist[['data']][['y']]; 
 #' xtest = mnist[['data_te']][['x']]; ytest=mnist[['data_te']][['y']]; 
 #' ########split the training and test data into two halfs for conformal prediction##############
@@ -20,13 +21,12 @@
 #' #########example using cv.glmnet##############
 #'  require(glmnet)
 #'  models1 = BCOPS.train(cv.glmnet, xtrain2, ytrain2, labels, xtest2)
-#'  prediction.conformal1 = BCOPS.prediction(models = models1, xtrain1, ytrain1, labels , xtest1)$prediction.conformal
 #'  models2 = BCOPS.train(cv.glmnet, xtrain1, ytrain1, labels, xtest1)
 #' #########example using random forest##########
 #'  require(ranger)
 #'  models1 = BCOPS.train(ranger, xtrain2, ytrain2, labels, xtest2, formula = TRUE)
-#'  prediction.conformal1 = BCOPS.prediction(models = models1, xtrain1, ytrain1, labels , xtest1, formula = TRUE, prediction_only = FALSE)$prediction.conformal
 #'  models2 = BCOPS.train(ranger, xtrain1, ytrain1, labels, xtest1, formula = TRUE)
+#'  }
 #' @export
 BCOPS.train <- function(classifier, x, y, labels, xte, formula = FALSE, ...){
   K = length(labels);models = list()
@@ -44,5 +44,6 @@ BCOPS.train <- function(classifier, x, y, labels, xte, formula = FALSE, ...){
       models[[k]] = classifier(formula = response~., data = data, ...)
     }
   }
-   models
+   class(models) = "model.list"
+   return(models)
 }

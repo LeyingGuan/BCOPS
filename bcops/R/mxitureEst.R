@@ -1,14 +1,15 @@
 #' mixtureEst estimates the proportion of each of the training classes in the test samples based on density estimation form the function kde.
-#' @param scores_test n by K score matrix where n is the size of test samples and K is the number of training classes. 
-#' @param scores_train m by K score matrix where m is the size of training samples and K is the number of training classes.
+#' @param scores_test m by K score matrix where m is the size of test samples and K is the number of training classes. 
+#' @param scores_train n by K score matrix where n is the size of training samples and K is the number of training classes.
 #' @param y label of the training samples.
-#' @param labels training class labels.
-#' @param zeta for each class k, we do not consider samples whose density is below zeta quantile of density distribution of training samples in class k.
+#' @param labels K training class labels.
+#' @param zeta for each class k, we do not consider samples whose density is below zeta quantile of density distribution of training samples in class k. By default, zeta = .2.
 #' @param ... parameters to feed into function kde.
 #' @return pi : estimated new mixture proportions.
 #' @import ks
 #' @import ranger
 #' @examples
+#' \dontrun{
 #' data(mnist);
 #' xtrain = mnist[['data']][['x']]; ytrain = mnist[['data']][['y']];
 #' xtest = mnist[['data_te']][['x']]; ytest=mnist[['data_te']][['y']];
@@ -28,6 +29,7 @@
 #' scores_test = prediction2$score_test; scores_train = prediction2$score_train
 #' pi2 = mixtureEst(scores_test, scores_train, ytrain2, labels = labels, zeta = .2, gridsize=512)
 #' pi = (pi1+pi2)/2
+#' }
 #' @export
 mixtureEst <-function(scores_test, scores_train, y, labels , zeta = .2, ...){
   K = length(labels)

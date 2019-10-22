@@ -1,7 +1,7 @@
 #' Conformal prediction for any given scores
 #' @param ste the list of scores for test samples corresponding to each of the training class.
 #' @param s the vector scores for training samples corresponding to its own class.
-#' @param y lables for the training data.
+#' @param y labels for the training data.
 #' @param labels labels for the K classes.
 #' @import Rcpp
 #' @useDynLib bcops

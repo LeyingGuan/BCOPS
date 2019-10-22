@@ -11,7 +11,7 @@ conformal_scores(ste, s, y, labels)
 
 \item{s}{the vector scores for training samples corresponding to its own class.}
 
-\item{y}{lables for the training data.}
+\item{y}{labels for the training data.}
 
 \item{labels}{labels for the K classes.}
 }

@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+<title>Leying Guan and Rob Tibshirani</title>
+
+<script type="text/javascript">
+window.onload = function() {
+  var imgs = document.getElementsByTagName('img'), i, img;
+  for (i = 0; i < imgs.length; i++) {
+    img = imgs[i];
+    // center an image if it is the only element of its parent
+    if (img.parentElement.childElementCount === 1)
+      img.parentElement.style.textAlign = 'center';
+  }
+};
+</script>
+
+<!-- Styles for R syntax highlighter -->
+<style type="text/css">
+   pre .operator,
+   pre .paren {
+     color: rgb(104, 118, 135)
+   }
+
+   pre .literal {
+     color: #990073
+   }
+
+   pre .number {
+     color: #099;
+   }
+
+   pre .comment {
+     color: #998;
+     font-style: italic
+   }
+
+   pre .keyword {
+     color: #900;
+     font-weight: bold
+   }
+
+   pre .identifier {
+     color: rgb(0, 0, 0);
+   }
+
+   pre .string {
+     color: #d14;
+   }
+</style>
+
+<!-- R syntax highlighter -->
+<script type="text/javascript">
+var hljs=new function(){function m(p){return p.replace(/&/gm,"&amp;").replace(/</gm,"&lt;")}function f(r,q,p){return RegExp(q,"m"+(r.cI?"i":"")+(p?"g":""))}function b(r){for(var p=0;p<r.childNodes.length;p++){var q=r.childNodes[p];if(q.nodeName=="CODE"){return q}if(!(q.nodeType==3&&q.nodeValue.match(/\s+/))){break}}}function h(t,s){var p="";for(var r=0;r<t.childNodes.length;r++){if(t.childNodes[r].nodeType==3){var q=t.childNodes[r].nodeValue;if(s){q=q.replace(/\n/g,"")}p+=q}else{if(t.childNodes[r].nodeName=="BR"){p+="\n"}else{p+=h(t.childNodes[r])}}}if(/MSIE [678]/.test(navigator.userAgent)){p=p.replace(/\r/g,"\n")}return p}function a(s){var r=s.className.split(/\s+/);r=r.concat(s.parentNode.className.split(/\s+/));for(var q=0;q<r.length;q++){var p=r[q].replace(/^language-/,"");if(e[p]){return p}}}function c(q){var p=[];(function(s,t){for(var r=0;r<s.childNodes.length;r++){if(s.childNodes[r].nodeType==3){t+=s.childNodes[r].nodeValue.length}else{if(s.childNodes[r].nodeName=="BR"){t+=1}else{if(s.childNodes[r].nodeType==1){p.push({event:"start",offset:t,node:s.childNodes[r]});t=arguments.callee(s.childNodes[r],t);p.push({event:"stop",offset:t,node:s.childNodes[r]})}}}}return t})(q,0);return p}function k(y,w,x){var q=0;var z="";var s=[];function u(){if(y.length&&w.length){if(y[0].offset!=w[0].offset){return(y[0].offset<w[0].offset)?y:w}else{return w[0].event=="start"?y:w}}else{return y.length?y:w}}function t(D){var A="<"+D.nodeName.toLowerCase();for(var B=0;B<D.attributes.length;B++){var C=D.attributes[B];A+=" "+C.nodeName.toLowerCase();if(C.value!==undefined&&C.value!==false&&C.value!==null){A+='="'+m(C.value)+'"'}}return A+">"}while(y.length||w.length){var v=u().splice(0,1)[0];z+=m(x.substr(q,v.offset-q));q=v.offset;if(v.event=="start"){z+=t(v.node);s.push(v.node)}else{if(v.event=="stop"){var p,r=s.length;do{r--;p=s[r];z+=("</"+p.nodeName.toLowerCase()+">")}while(p!=v.node);s.splice(r,1);while(r<s.length){z+=t(s[r]);r++}}}}return z+m(x.substr(q))}function j(){function q(x,y,v){if(x.compiled){return}var u;var s=[];if(x.k){x.lR=f(y,x.l||hljs.IR,true);for(var w in x.k){if(!x.k.hasOwnProperty(w)){continue}if(x.k[w] instanceof Object){u=x.k[w]}else{u=x.k;w="keyword"}for(var r in u){if(!u.hasOwnProperty(r)){continue}x.k[r]=[w,u[r]];s.push(r)}}}if(!v){if(x.bWK){x.b="\\b("+s.join("|")+")\\s"}x.bR=f(y,x.b?x.b:"\\B|\\b");if(!x.e&&!x.eW){x.e="\\B|\\b"}if(x.e){x.eR=f(y,x.e)}}if(x.i){x.iR=f(y,x.i)}if(x.r===undefined){x.r=1}if(!x.c){x.c=[]}x.compiled=true;for(var t=0;t<x.c.length;t++){if(x.c[t]=="self"){x.c[t]=x}q(x.c[t],y,false)}if(x.starts){q(x.starts,y,false)}}for(var p in e){if(!e.hasOwnProperty(p)){continue}q(e[p].dM,e[p],true)}}function d(B,C){if(!j.called){j();j.called=true}function q(r,M){for(var L=0;L<M.c.length;L++){if((M.c[L].bR.exec(r)||[null])[0]==r){return M.c[L]}}}function v(L,r){if(D[L].e&&D[L].eR.test(r)){return 1}if(D[L].eW){var M=v(L-1,r);return M?M+1:0}return 0}function w(r,L){return L.i&&L.iR.test(r)}function K(N,O){var M=[];for(var L=0;L<N.c.length;L++){M.push(N.c[L].b)}var r=D.length-1;do{if(D[r].e){M.push(D[r].e)}r--}while(D[r+1].eW);if(N.i){M.push(N.i)}return f(O,M.join("|"),true)}function p(M,L){var N=D[D.length-1];if(!N.t){N.t=K(N,E)}N.t.lastIndex=L;var r=N.t.exec(M);return r?[M.substr(L,r.index-L),r[0],false]:[M.substr(L),"",true]}function z(N,r){var L=E.cI?r[0].toLowerCase():r[0];var M=N.k[L];if(M&&M instanceof Array){return M}return false}function F(L,P){L=m(L);if(!P.k){return L}var r="";var O=0;P.lR.lastIndex=0;var M=P.lR.exec(L);while(M){r+=L.substr(O,M.index-O);var N=z(P,M);if(N){x+=N[1];r+='<span class="'+N[0]+'">'+M[0]+"</span>"}else{r+=M[0]}O=P.lR.lastIndex;M=P.lR.exec(L)}return r+L.substr(O,L.length-O)}function J(L,M){if(M.sL&&e[M.sL]){var r=d(M.sL,L);x+=r.keyword_count;return r.value}else{return F(L,M)}}function I(M,r){var L=M.cN?'<span class="'+M.cN+'">':"";if(M.rB){y+=L;M.buffer=""}else{if(M.eB){y+=m(r)+L;M.buffer=""}else{y+=L;M.buffer=r}}D.push(M);A+=M.r}function G(N,M,Q){var R=D[D.length-1];if(Q){y+=J(R.buffer+N,R);return false}var P=q(M,R);if(P){y+=J(R.buffer+N,R);I(P,M);return P.rB}var L=v(D.length-1,M);if(L){var O=R.cN?"</span>":"";if(R.rE){y+=J(R.buffer+N,R)+O}else{if(R.eE){y+=J(R.buffer+N,R)+O+m(M)}else{y+=J(R.buffer+N+M,R)+O}}while(L>1){O=D[D.length-2].cN?"</span>":"";y+=O;L--;D.length--}var r=D[D.length-1];D.length--;D[D.length-1].buffer="";if(r.starts){I(r.starts,"")}return R.rE}if(w(M,R)){throw"Illegal"}}var E=e[B];var D=[E.dM];var A=0;var x=0;var y="";try{var s,u=0;E.dM.buffer="";do{s=p(C,u);var t=G(s[0],s[1],s[2]);u+=s[0].length;if(!t){u+=s[1].length}}while(!s[2]);if(D.length>1){throw"Illegal"}return{r:A,keyword_count:x,value:y}}catch(H){if(H=="Illegal"){return{r:0,keyword_count:0,value:m(C)}}else{throw H}}}function g(t){var p={keyword_count:0,r:0,value:m(t)};var r=p;for(var q in e){if(!e.hasOwnProperty(q)){continue}var s=d(q,t);s.language=q;if(s.keyword_count+s.r>r.keyword_count+r.r){r=s}if(s.keyword_count+s.r>p.keyword_count+p.r){r=p;p=s}}if(r.language){p.second_best=r}return p}function i(r,q,p){if(q){r=r.replace(/^((<[^>]+>|\t)+)/gm,function(t,w,v,u){return w.replace(/\t/g,q)})}if(p){r=r.replace(/\n/g,"<br>")}return r}function n(t,w,r){var x=h(t,r);var v=a(t);var y,s;if(v){y=d(v,x)}else{return}var q=c(t);if(q.length){s=document.createElement("pre");s.innerHTML=y.value;y.value=k(q,c(s),x)}y.value=i(y.value,w,r);var u=t.className;if(!u.match("(\\s|^)(language-)?"+v+"(\\s|$)")){u=u?(u+" "+v):v}if(/MSIE [678]/.test(navigator.userAgent)&&t.tagName=="CODE"&&t.parentNode.tagName=="PRE"){s=t.parentNode;var p=document.createElement("div");p.innerHTML="<pre><code>"+y.value+"</code></pre>";t=p.firstChild.firstChild;p.firstChild.cN=s.cN;s.parentNode.replaceChild(p.firstChild,s)}else{t.innerHTML=y.value}t.className=u;t.result={language:v,kw:y.keyword_count,re:y.r};if(y.second_best){t.second_best={language:y.second_best.language,kw:y.second_best.keyword_count,re:y.second_best.r}}}function o(){if(o.called){return}o.called=true;var r=document.getElementsByTagName("pre");for(var p=0;p<r.length;p++){var q=b(r[p]);if(q){n(q,hljs.tabReplace)}}}function l(){if(window.addEventListener){window.addEventListener("DOMContentLoaded",o,false);window.addEventListener("load",o,false)}else{if(window.attachEvent){window.attachEvent("onload",o)}else{window.onload=o}}}var e={};this.LANGUAGES=e;this.highlight=d;this.highlightAuto=g;this.fixMarkup=i;this.highlightBlock=n;this.initHighlighting=o;this.initHighlightingOnLoad=l;this.IR="[a-zA-Z][a-zA-Z0-9_]*";this.UIR="[a-zA-Z_][a-zA-Z0-9_]*";this.NR="\\b\\d+(\\.\\d+)?";this.CNR="\\b(0[xX][a-fA-F0-9]+|(\\d+(\\.\\d*)?|\\.\\d+)([eE][-+]?\\d+)?)";this.BNR="\\b(0b[01]+)";this.RSR="!|!=|!==|%|%=|&|&&|&=|\\*|\\*=|\\+|\\+=|,|\\.|-|-=|/|/=|:|;|<|<<|<<=|<=|=|==|===|>|>=|>>|>>=|>>>|>>>=|\\?|\\[|\\{|\\(|\\^|\\^=|\\||\\|=|\\|\\||~";this.ER="(?![\\s\\S])";this.BE={b:"\\\\.",r:0};this.ASM={cN:"string",b:"'",e:"'",i:"\\n",c:[this.BE],r:0};this.QSM={cN:"string",b:'"',e:'"',i:"\\n",c:[this.BE],r:0};this.CLCM={cN:"comment",b:"//",e:"$"};this.CBLCLM={cN:"comment",b:"/\\*",e:"\\*/"};this.HCM={cN:"comment",b:"#",e:"$"};this.NM={cN:"number",b:this.NR,r:0};this.CNM={cN:"number",b:this.CNR,r:0};this.BNM={cN:"number",b:this.BNR,r:0};this.inherit=function(r,s){var p={};for(var q in r){p[q]=r[q]}if(s){for(var q in s){p[q]=s[q]}}return p}}();hljs.LANGUAGES.cpp=function(){var a={keyword:{"false":1,"int":1,"float":1,"while":1,"private":1,"char":1,"catch":1,"export":1,virtual:1,operator:2,sizeof:2,dynamic_cast:2,typedef:2,const_cast:2,"const":1,struct:1,"for":1,static_cast:2,union:1,namespace:1,unsigned:1,"long":1,"throw":1,"volatile":2,"static":1,"protected":1,bool:1,template:1,mutable:1,"if":1,"public":1,friend:2,"do":1,"return":1,"goto":1,auto:1,"void":2,"enum":1,"else":1,"break":1,"new":1,extern:1,using:1,"true":1,"class":1,asm:1,"case":1,typeid:1,"short":1,reinterpret_cast:2,"default":1,"double":1,register:1,explicit:1,signed:1,typename:1,"try":1,"this":1,"switch":1,"continue":1,wchar_t:1,inline:1,"delete":1,alignof:1,char16_t:1,char32_t:1,constexpr:1,decltype:1,noexcept:1,nullptr:1,static_assert:1,thread_local:1,restrict:1,_Bool:1,complex:1},built_in:{std:1,string:1,cin:1,cout:1,cerr:1,clog:1,stringstream:1,istringstream:1,ostringstream:1,auto_ptr:1,deque:1,list:1,queue:1,stack:1,vector:1,map:1,set:1,bitset:1,multiset:1,multimap:1,unordered_set:1,unordered_map:1,unordered_multiset:1,unordered_multimap:1,array:1,shared_ptr:1}};return{dM:{k:a,i:"</",c:[hljs.CLCM,hljs.CBLCLM,hljs.QSM,{cN:"string",b:"'\\\\?.",e:"'",i:"."},{cN:"number",b:"\\b(\\d+(\\.\\d*)?|\\.\\d+)(u|U|l|L|ul|UL|f|F)"},hljs.CNM,{cN:"preprocessor",b:"#",e:"$"},{cN:"stl_container",b:"\\b(deque|list|queue|stack|vector|map|set|bitset|multiset|multimap|unordered_map|unordered_set|unordered_multiset|unordered_multimap|array)\\s*<",e:">",k:a,r:10,c:["self"]}]}}}();hljs.LANGUAGES.r={dM:{c:[hljs.HCM,{cN:"number",b:"\\b0[xX][0-9a-fA-F]+[Li]?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+(?:[eE][+\\-]?\\d*)?L\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+\\.(?!\\d)(?:i\\b)?",e:hljs.IMMEDIATE_RE,r:1},{cN:"number",b:"\\b\\d+(?:\\.\\d*)?(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\.\\d+(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"keyword",b:"(?:tryCatch|library|setGeneric|setGroupGeneric)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\.",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\d+(?![\\w.])",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\b(?:function)",e:hljs.IMMEDIATE_RE,r:2},{cN:"keyword",b:"(?:if|in|break|next|repeat|else|for|return|switch|while|try|stop|warning|require|attach|detach|source|setMethod|setClass)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"literal",b:"(?:NA|NA_integer_|NA_real_|NA_character_|NA_complex_)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"literal",b:"(?:NULL|TRUE|FALSE|T|F|Inf|NaN)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"identifier",b:"[a-zA-Z.][a-zA-Z0-9._]*\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"<\\-(?!\\s*\\d)",e:hljs.IMMEDIATE_RE,r:2},{cN:"operator",b:"\\->|<\\-",e:hljs.IMMEDIATE_RE,r:1},{cN:"operator",b:"%%|~",e:hljs.IMMEDIATE_RE},{cN:"operator",b:">=|<=|==|!=|\\|\\||&&|=|\\+|\\-|\\*|/|\\^|>|<|!|&|\\||\\$|:",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"%",e:"%",i:"\\n",r:1},{cN:"identifier",b:"`",e:"`",r:0},{cN:"string",b:'"',e:'"',c:[hljs.BE],r:0},{cN:"string",b:"'",e:"'",c:[hljs.BE],r:0},{cN:"paren",b:"[[({\\])}]",e:hljs.IMMEDIATE_RE,r:0}]}};
+hljs.initHighlightingOnLoad();
+</script>
+
+<!-- MathJax scripts -->
+<script type="text/javascript" src="https://cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
+<style type="text/css">
+body, td {
+   font-family: sans-serif;
+   background-color: white;
+   font-size: 13px;
+}
+
+body {
+  max-width: 800px;
+  margin: auto;
+  padding: 1em;
+  line-height: 20px;
+}
+
+tt, code, pre {
+   font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
+}
+
+h1 {
+   font-size:2.2em;
+}
+
+h2 {
+   font-size:1.8em;
+}
+
+h3 {
+   font-size:1.4em;
+}
+
+h4 {
+   font-size:1.0em;
+}
+
+h5 {
+   font-size:0.9em;
+}
+
+h6 {
+   font-size:0.8em;
+}
+
+a:visited {
+   color: rgb(50%, 0%, 50%);
+}
+
+pre, img {
+  max-width: 100%;
+}
+pre {
+  overflow-x: auto;
+}
+pre code {
+   display: block; padding: 0.5em;
+}
+
+code {
+  font-size: 92%;
+  border: 1px solid #ccc;
+}
+
+code[class] {
+  background-color: #F8F8F8;
+}
+
+table, td, th {
+  border: none;
+}
+
+blockquote {
+   color:#666666;
+   margin:0;
+   padding-left: 1em;
+   border-left: 0.5em #EEE solid;
+}
+
+hr {
+   height: 0px;
+   border-bottom: none;
+   border-top-width: thin;
+   border-top-style: dotted;
+   border-top-color: #999999;
+}
+
+@media print {
+   * {
+      background: transparent !important;
+      color: black !important;
+      filter:none !important;
+      -ms-filter: none !important;
+   }
+
+   body {
+      font-size:12pt;
+      max-width:100%;
+   }
+
+   a, a:visited {
+      text-decoration: underline;
+   }
+
+   hr {
+      visibility: hidden;
+      page-break-before: always;
+   }
+
+   pre, blockquote {
+      padding-right: 1em;
+      page-break-inside: avoid;
+   }
+
+   tr, img {
+      page-break-inside: avoid;
+   }
+
+   img {
+      max-width: 100% !important;
+   }
+
+   @page :left {
+      margin: 15mm 20mm 15mm 10mm;
+   }
+
+   @page :right {
+      margin: 15mm 10mm 15mm 20mm;
+   }
+
+   p, h2, h3 {
+      orphans: 3; widows: 3;
+   }
+
+   h2, h3 {
+      page-break-after: avoid;
+   }
+}
+</style>
+
+
+
+</head>
+
+<body>
+<h3>Leying Guan and Rob Tibshirani</h3>
+
+<h4>Yale October 1, 2019</h4>
+
+<p>Introduction and installation</p>
+
+<blockquote>
+<p><a href="#intro">Introduction</a></p>
+
+<p><a href="#install">Installation</a></p>
+</blockquote>
+
+<p>Training and prediction with BCOPS.</p>
+
+<blockquote>
+<p><a href="#bcops">BCOPS</a></p>
+</blockquote>
+
+<p>Training BCOPS model.</p>
+
+<blockquote>
+<p><a href="#train">BCOPS.train</a></p>
+</blockquote>
+
+<p>Prediction set construction for new samples.</p>
+
+<blockquote>
+<p><a href="#prediction">BCOPS.prediction</a></p>
+</blockquote>
+
+<p>Evaluate the prediction quality given the true labels.</p>
+
+<blockquote>
+<p><a href="#evaluate">evaluate.conformal</a></p>
+</blockquote>
+
+<p>Estimating the distributional shift comparing training and test sample.</p>
+
+<blockquote>
+<p><a href="#mixEst">mixtureEst</a></p>
+</blockquote>
+
+<p><a id="intro"></a></p>
+
+<h2>Introduction</h2>
+
+<p>BCOPS (balanced &amp; conformal optimized prediction set) is a model-free and efficient method for doing classification in the presence of distributional shift or outliers. It does not assume anything about the relationship between the class label y and observed features x (p dimensional), and it makes decision based only on the following assumption:</p>
+
+<pre><code>Distribution of x given its class label y remain the same across training and test data
+</code></pre>
+
+<p>Further, it allows outliers and distributional shift by considering the following model</p>
+
+<p>\[
+f(x) = \sum^K_{k=1} \pi_k f_{k}(x)
+\]
+and
+\[
+f_{test}(x) = \sum^K_{k=1} \tilde{\pi}_k f_{k}(x)+\epsilon \cdot e(x)
+\]
+Here, we let \(f(x)\) be the marginal density for \(x\) in the training data, \(f_k(x)\) be the density function of class \(k\), and \(\pi_k\) be the proportion of class \(k\) in the training data, with \(\sum^K_{k=1}\pi_k =1\). The test samples may differ from the training data in two ways:</p>
+
+<ol>
+<li><p>\(\tilde\pi_k\), the proportions of each class in the test data, may be different from \(\pi_k\), that in the training data.</p></li>
+<li><p>There may be non-negligible proportion \(\epsilon \geq 0\) of outliers, whose density is characterized by \(e(x)\). In other words, we may have \(\sum^K_{k=1}\tilde\pi_k < 1\) and \(\epsilon = 1-\sum^K_{k=1}\tilde\pi_k>0\).</p></li>
+</ol>
+
+<p>When both the labeled training data and the unlabeled test samples are available, BCOPS provides an asymptotic optimal decision rule for constructing prediction set where we can assign both multiple or 0 class labels to each of the test sample under some Assumptions. Moreover, it can always control the type I error defined as the mis-coverage of a given class label at a desired level: let \(C(x)\in \{1,2,\ldots, K\}\) be the set of class labels we assign to x, we can use BCOPS to construct such \(C(x)\), such that we always have
+\[
+ P_{k}(k\in C(x)) \geq 1-\alpha
+\]</p>
+
+<p>Details of BCOPS can be found in the [1]. Here, we merely describe the high level ideal of it.</p>
+
+<p>As a contrast to most classification methods, BCOPS do not build a classifier merely based on the labeled training data, instead, it will also use the unlabeled  test data to find an optimal strategy for classifying the test samples. More precisely:</p>
+
+<ol>
+<li>BCOPS decide whether to assign class label \(k\) to a sample based on the following density ratio</li>
+</ol>
+
+<p>\[
+v_k(x) = \frac{f_k(x)}{f_{test}(x)+f_k(x)}
+\]
+The higher \(v_k(x)\) is, the more willingly we are to assign label \(k\) to \(x\). The cut-off is calculated based on the idea of conformal inference, which guarantees finite sample coverage for any given label \(k\).</p>
+
+<ol>
+<li>Density estimation suffers from increasing dimensionality. However, for most practical problems, we can usually approximate density ratio with properly chosen supervised learning algorithms if the underlying difference between two types of data is well-structured (the foundation of any supervised algorithm to work well in high dimension). Instead of learning the density, BCOPS will used any user preferred supervised learning algorithm to approximate \(v_k(x)\), and this enables BCOPS to perform quite well in high dimension in many real data set.</li>
+</ol>
+
+<p>[1] Guan, Leying, and Rob Tibshirani. &ldquo;Prediction and outlier detection in classification problems.&rdquo; arXiv preprint arXiv:1905.04396 (2019).</p>
+
+<p><a id="install"></a></p>
+
+<h2>Installation</h2>
+
+<p>Like many other R packages, the simplest way to obtain <code>glmnet</code> is to install it directly from CRAN. Type the following command in R console:</p>
+
+<pre><code class="r">install.packages(&quot;bcops&quot;, repos = &quot;https://cran.us.r-project.org&quot;)
+</code></pre>
+
+<p>Users may change the <code>repos</code> options depending on their locations and preferences. Other options such as the directories where to install the packages can be altered in the command. For more details, see <code>help(install.packages)</code>.</p>
+
+<p>Here the R package has been downloaded and installed to the default directories.</p>
+
+<p>The user can also install the package using source files in github by the following commands:</p>
+
+<p>library(devtools)</p>
+
+<p>install_github(&ldquo;LeyingGuan/BCOPS/bcops&rdquo;)</p>
+
+<h2>BCOPS</h2>
+
+<p><a id="bcops"></a></p>
+
+<p>BCOPS function train and make prediction using BCOPS with a user specified classifer. For more flexibility with the arguments, the user can also choose to use BCOPS.train and BCOP.prediction to perform training and predicting in seperate steps.</p>
+
+<h3>Usage</h3>
+
+<p>BCOPS.train(classifier, x, y, labels, xte, formula = FALSE, &hellip;)</p>
+
+<h4>Arguments</h4>
+
+<ul>
+<li><p><code>classifier</code>: a user-specified classifier. Note that the classifier can either takes input as feature matrix x and response y, or a dataframe contains features and response and a formula.</p></li>
+<li><p><code>x1</code>: n1 by p feature matrix for the first fold of training data.</p></li>
+<li><p><code>y1</code>: length n1 class labels for the first fold of training data.</p></li>
+<li><p><code>xte1</code>: m1 by p feature matrix for the first fold of test data.</p></li>
+<li><p><code>x2</code>: n1 by p feature matrix for the first fold of training data.</p></li>
+<li><p><code>y2</code>: length n1 class labels for the first fold of training data.</p></li>
+<li><p><code>xte2</code>: m2 by p feature matrix for the first fold of test data.</p></li>
+<li><p><code>labels</code>: labels for the K training classes.</p></li>
+<li><p><code>formula</code>: boolean variable indicating if the classifier takes data argument as classifier(formula, data,&hellip;) or  classifier(x, y,&hellip;). The function ranger is an example of the former, and the function cv.glmnet is an example of the later.</p></li>
+<li><p><code>prediction_only</code>: boolean variable indicating whether predict(classifier,&hellip;) returns directly the predictions (TRUE) or need to be accessed by a specific name.</p></li>
+<li><p><code>name</code>: the name we can use to access the predictions. By default, name = &ldquo;predictions&rdquo;.</p></li>
+<li><p><code>...</code>: other arguments depending on the classifier. Note the argument is applied to the augmented data by stacking x and xte together when building a binary classifier.</p></li>
+</ul>
+
+<h3>Values</h3>
+
+<ul>
+<li><p><code>conformal.scores1</code>: The m1 by K conformal scores for the first fold of test samples xte1.</p></li>
+<li><p><code>conformal.scores2</code>: The m2 by K conformal scores for the second fold of test samples xte2.</p></li>
+</ul>
+
+<p><a id="train"></a></p>
+
+<h3>Examples</h3>
+
+<p>data(mnist);</p>
+
+<p>xtrain = mnist[[&#39;data&#39;]][[&#39;x&#39;]]; ytrain = mnist[[&#39;data&#39;]][[&#39;y&#39;]];
+xtest = mnist[[&#39;data_te&#39;]][[&#39;x&#39;]]; ytest=mnist[[&#39;data_te&#39;]][[&#39;y&#39;]];</p>
+
+<p>########split the training and test data into two halfs for conformal prediction##############</p>
+
+<p>set.seed(123)</p>
+
+<p>foldid = sample(1:2, length(ytrain), replace = TRUE); foldid_te = sample(1:2,length(ytest), replace = TRUE)</p>
+
+<p>xtrain1 = xtrain[foldid==1,]; xtrain2 = xtrain[foldid==2,]; </p>
+
+<p>ytrain1 = ytrain[foldid==1];ytrain2=ytrain[foldid==2]</p>
+
+<p>xtest1 = xtest[foldid_te ==1,]; xtest2 = xtest[foldid_te==2,];</p>
+
+<p>labels = sort(unique(ytrain))</p>
+
+<p>#########example using cv.glmnet##############</p>
+
+<p>require(glmnet)</p>
+
+<p>bcops1 = BCOPS(cv.glmnet, xtrain1, ytrain1, xtest1,
+                 xtrain2, ytrain2, xtest2, labels, formula = FALSE)</p>
+
+<p>#########example using random forest##########</p>
+
+<p>require(ranger)</p>
+
+<p>bcops2 = BCOPS(ranger, xtrain1, ytrain1, xtest1, xtrain2, ytrain2, xtest2, labels, formula = TRUE)</p>
+
+<h2>BCOPS.train</h2>
+
+<p>BCOPS.train takes in a set of training samples (x, y) and a set of unlabeled test set xte to estimate the score function using any classifier the user prefers.  Note that the user needs to split the training and the test data set into two folds, and BCOPS.train takes into data corresponding to one fold only to train a score function for prediction in the other fold, this sample splitting step is required to achieve finite sample coverage at any given level.</p>
+
+<h3>Usage</h3>
+
+<p>BCOPS.train(classifier, x, y, labels, xte, formula = FALSE, &hellip;)</p>
+
+<h4>Arguments</h4>
+
+<ul>
+<li><p><code>classifier</code>: a user-specified classifier. Note that the classifier can either takes input as feature matrix x and response y, or a dataframe contains features and response and a formula.</p></li>
+<li><p><code>x</code>: n by p feature matrix for the training data to be used in constructing \(v_k(x)\).</p></li>
+<li><p><code>y</code>: length n class labels for the training data to be used in constructing \(v_k(x)\).</p></li>
+<li><p><code>labels</code>: labels for the K training classes.</p></li>
+<li><p><code>xte</code>: m by p features for the test data to be used in constructing \(v_k(x)\).</p></li>
+<li><p><code>formula</code>: boolean variable indicating if the classifier takes data argument as classifier(formula, data,&hellip;) or  classifier(x, y,&hellip;). The function ranger is an example of the former, and the function cv.glmnet is an example of the later.</p></li>
+<li><p><code>...</code>: other arguments for classifiers when performing binary classification to learn \(v_k(x)\), for example, weights argument to reweight samples.</p></li>
+</ul>
+
+<h4>Value</h4>
+
+<ul>
+<li>a list trained models that is used for predict the BCOPs score for each new observation.</li>
+</ul>
+
+<h3>Examples</h3>
+
+<p>data(mnist); </p>
+
+<p>xtrain = mnist[[&#39;data&#39;]][[&#39;x&#39;]]; ytrain = mnist[[&#39;data&#39;]][[&#39;y&#39;]]; 
+xtest = mnist[[&#39;data_te&#39;]][[&#39;x&#39;]]; ytest=mnist[[&#39;data_te&#39;]][[&#39;y&#39;]]; </p>
+
+<p>#########data splitting##############</p>
+
+<p>set.seed(123)</p>
+
+<p>foldid = sample(1:2, length(ytrain), replace = TRUE); foldid_te = sample(1:2,length(ytest), replace = TRUE)</p>
+
+<p>xtrain1 = xtrain[foldid==1,]; xtrain2 = xtrain[foldid==2,]; </p>
+
+<p>ytrain1 = ytrain[foldid==1]; ytrain2=ytrain[foldid==2]</p>
+
+<p>xtest1 = xtest[foldid_te ==1,]; xtest2 = xtest[foldid_te==2,]; </p>
+
+<p>labels = sort(unique(ytrain)) </p>
+
+<p>#########example using cv.glmnet##############</p>
+
+<p>require(glmnet)</p>
+
+<p>models2 = BCOPS.train(cv.glmnet, xtrain2, ytrain2, labels, xtest2)</p>
+
+<p>#########example using random forest##########</p>
+
+<p>require(ranger)</p>
+
+<p>models1 = BCOPS.train(ranger, xtrain2, ytrain2, labels, xtest2, formula = TRUE)</p>
+
+<p><a id="prediction"></a></p>
+
+<h2>BCOPS.prediction</h2>
+
+<p>This function that takes in models produced from BCOPS.train and apply it and conformal inference to new training and test samples. </p>
+
+<h3>Usage</h3>
+
+<p>BCOPS.prediction(models, x, y, labels, xte, formula = FALSE, prediction_only = TRUE, name = &ldquo;predictions&rdquo;)</p>
+
+<h3>Arguments</h3>
+
+<ul>
+<li><p><code>models</code>: a list of models calculating the predicted \(v_k(x)\) for each class, it is an object from BCOPS.train. </p></li>
+<li><p><code>x</code>: n by p feature matrix for the training data to be used in conformal inference.</p></li>
+<li><p><code>y</code>: length n class labels for the training data to be used in the conformal inference.</p></li>
+<li><p><code>labels</code>: Labels for the K classes when applying BCOPS.train.</p></li>
+<li><p><code>xte</code>: m by p features for the test data to be used in the conformal inference.</p></li>
+<li><p><code>formula</code>: boolean variable indicating if the classifier takes data argument as classifier(formula, data,&hellip;) or  classifier(x, y,&hellip;). The function ranger is an example of the former, and the function cv.glmnet is an example of the later.</p></li>
+<li><p><code>prediction_only</code>: boolean variable indicating whether predict(classifier,&hellip;) returns directly the predictions (TRUE) or need to be accessed by a specific name.</p></li>
+<li><p><code>name</code>: the name we can use to access the predictions. By default, name = &ldquo;predictions&rdquo;.</p></li>
+</ul>
+
+<h3>Value</h3>
+
+<ul>
+<li><p><code>prediction.conformal</code>: a m by K matrix for m test samples, it is the conformal constructed p-value for a test sample not from each of the K classes. If we want to control the type I error at alpha, then, we assign all class labels whose conformal p-value is no smaller than alpha to the test samples.</p></li>
+<li><p><code>scores_test</code>: a m by K matrix for m test samples and K classes, each entry is the value evaluated at a test sample using score function for a training class. </p></li>
+<li><p><code>scores_train</code>: a n by K matrix for n training samples, each entry is the value evaluated at a training sample using score function for a training class. </p></li>
+</ul>
+
+<h3>Examples</h3>
+
+<p>data(mnist); </p>
+
+<p>xtrain = mnist[[&#39;data&#39;]][[&#39;x&#39;]]; ytrain = mnist[[&#39;data&#39;]][[&#39;y&#39;]]; 
+xtest = mnist[[&#39;data_te&#39;]][[&#39;x&#39;]]; ytest=mnist[[&#39;data_te&#39;]][[&#39;y&#39;]]; </p>
+
+<p>#########data splitting##############</p>
+
+<p>set.seed(123)</p>
+
+<p>foldid = sample(1:2, length(ytrain), replace = TRUE); foldid_te = sample(1:2,length(ytest), replace = TRUE)</p>
+
+<p>xtrain1 = xtrain[foldid==1,]; xtrain2 = xtrain[foldid==2,]; </p>
+
+<p>ytrain1 = ytrain[foldid==1]; ytrain2=ytrain[foldid==2]</p>
+
+<p>xtest1 = xtest[foldid_te ==1,]; xtest2 = xtest[foldid_te==2,]; </p>
+
+<p>labels = sort(unique(ytrain)) </p>
+
+<p>#########example using cv.glmnet##############</p>
+
+<p>require(glmnet)
+models1 = BCOPS.train(cv.glmnet, xtrain2, ytrain2, labels, xtest2)</p>
+
+<p>prediction.conformal1 = BCOPS.prediction(models = models1, xtrain1, ytrain1, labels , xtest1)</p>
+
+<p>#########example using random forest##########</p>
+
+<p>require(ranger)
+models1 = BCOPS.train(ranger, xtrain2, ytrain2, labels, xtest2, formula = TRUE)</p>
+
+<p>prediction.conformal1 = BCOPS.prediction(models = models1, xtrain1, ytrain1, labels , xtest1, formula = TRUE, prediction_only = FALSE)</p>
+
+<p><a id="evaluate"></a></p>
+
+<h2>evaluate.conformal</h2>
+
+<p>This function evaluate the predictions from BCOPS.prediction.</p>
+
+<h3>Usage</h3>
+
+<p>evaluate.conformal(prediction, yte, labels, alpha = 0.05)</p>
+
+<h3>Arguments</h3>
+
+<p>*<code>prediction</code>: the m by K prediction matrix containing the constructed conformal p-value for m test samples and K training classes.</p>
+
+<p>*<code>yte</code>: class labels for the test samples.</p>
+
+<p>*<code>labels</code>: the K class labels for the training samples.</p>
+
+<p>*<code>alpha</code>: the targeted type I error.</p>
+
+<h3>Value</h3>
+
+<ul>
+<li>a result table with the columns being the classes in the test samples, and the rows being the classes in the training samples. The entry at row j and column k represents the percent of samples in class j assigned label k. </li>
+</ul>
+
+<h3>Examples</h3>
+
+<p>data(mnist); </p>
+
+<p>xtrain = mnist[[&#39;data&#39;]][[&#39;x&#39;]]; ytrain = mnist[[&#39;data&#39;]][[&#39;y&#39;]]; 
+xtest = mnist[[&#39;data_te&#39;]][[&#39;x&#39;]]; ytest=mnist[[&#39;data_te&#39;]][[&#39;y&#39;]]; 
+#########data splitting##############</p>
+
+<p>set.seed(123)</p>
+
+<p>foldid = sample(1:2, length(ytrain), replace = TRUE); foldid_te = sample(1:2,length(ytest), replace = TRUE)</p>
+
+<p>xtrain1 = xtrain[foldid==1,]; xtrain2 = xtrain[foldid==2,]; </p>
+
+<p>ytrain1 = ytrain[foldid==1]; ytrain2=ytrain[foldid==2]</p>
+
+<p>xtest1 = xtest[foldid_te ==1,]; xtest2 = xtest[foldid_te==2,]; </p>
+
+<p>labels = sort(unique(ytrain)) </p>
+
+<p>#########example using ranger##############</p>
+
+<p>bcops = BCOPS(ranger, xtrain1, ytrain1, xtest1, xtrain2, ytrain2, xtest2, labels, formula = TRUE)</p>
+
+<p>prediction.conformal = matrix(NA, ncol = length(labels), nrow = length(ytest))</p>
+
+<p>prediction.conformal[foldid_te==1,] = bcops[[1]];</p>
+
+<p>prediction.conformal[foldid_te==2,] = bcops[[2]];</p>
+
+<p>evaluate.conformal(prediction.conformal, ytest, labels, 0.05)</p>
+
+<p><a id="mixEst"></a></p>
+
+<h2>mixtureEst</h2>
+
+<p>mixtureEst estimates the proportion of each of the training classes in the test samples based on density estimation form the function kde.</p>
+
+<h3>Usage</h3>
+
+<p>mixtureEst(scores_test, scores_train, y, labels , zeta = .2, &hellip;)</p>
+
+<h3>Arguments</h3>
+
+<ul>
+<li><p><code>scores_test</code>: m by K score matrix where m is the size of test samples and K is the number of training classes. </p></li>
+<li><p><code>scores_train</code>: n by K score matrix where n is the size of training samples and K is the number of training classes.</p></li>
+<li><p><code>y</code>: labels of the training samples.</p></li>
+<li><p><code>labels</code>: K training class labels.</p></li>
+<li><p><code>zeta</code>: for each class k, we do not consider samples whose density is below zeta quantile of density distribution of training samples in class k. By default, zeta = .2.</p></li>
+<li><p><code>...</code> parameters to feed into density estimation function kde.</p></li>
+</ul>
+
+<h3>Values</h3>
+
+<ul>
+<li><code>pi</code>: estimated new mixture proportions.</li>
+</ul>
+
+<h3>Examples</h3>
+
+<p>data(mnist);</p>
+
+<p>xtrain = mnist[[&#39;data&#39;]][[&#39;x&#39;]]; ytrain = mnist[[&#39;data&#39;]][[&#39;y&#39;]];
+xtest = mnist[[&#39;data_te&#39;]][[&#39;x&#39;]]; ytest=mnist[[&#39;data_te&#39;]][[&#39;y&#39;]];</p>
+
+<p>########split the training and test data into two halves for conformal prediction##############</p>
+
+<p>set.seed(123)</p>
+
+<p>foldid = sample(1:2, length(ytrain), replace = TRUE); foldid_te = sample(1:2,length(ytest), replace = TRUE)</p>
+
+<p>xtrain1 = xtrain[foldid==1,]; xtrain2 = xtrain[foldid==2,]; </p>
+
+<p>ytrain1 = ytrain[foldid==1]; ytrain2=ytrain[foldid==2]</p>
+
+<p>xtest1 = xtest[foldid_te ==1,]; xtest2 = xtest[foldid_te==2,];</p>
+
+<p>labels = sort(unique(ytrain))</p>
+
+<p>require(ranger)</p>
+
+<p>models1 = BCOPS.train(ranger, xtrain2, ytrain2, labels, xtest2, formula = TRUE)</p>
+
+<p>models2 = BCOPS.train(ranger, xtrain1, ytrain1, labels, xtest1, formula = TRUE)</p>
+
+<p>prediction1=BCOPS.prediction(models = models1, xtrain1, ytrain1, labels , xtest1, formula = TRUE, prediction_only = FALSE)</p>
+
+<p>scores_test = prediction1$score_test; scores_train = prediction1$score_train</p>
+
+<p>pi1 = mixtureEst(scores_test, scores_train, ytrain1, labels = labels, zeta = .2, gridsize=512)</p>
+
+<p>prediction2=BCOPS.prediction(models = models2, xtrain2, ytrain2, labels , xtest2, formula = TRUE, prediction_only = FALSE)</p>
+
+<p>scores_test = prediction2$score_test; scores_train = prediction2$score_train</p>
+
+<p>pi2 = mixtureEst(scores_test, scores_train, ytrain2, labels = labels, zeta = .2, gridsize=512)</p>
+
+<p>pi = (pi1+pi2)/2</p>
+
+</body>
+
+</html>

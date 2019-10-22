@@ -11,6 +11,9 @@ Depends: R (>= 3.5.0)
 Encoding: UTF-8
 LazyData: true
 LinkingTo: Rcpp
-Imports: Rcpp (>= 0.11.0), glmnet, MASS, Matrix, foreach, ranger, ks
+Imports: Rcpp (>= 0.11.0), glmnet, MASS, Matrix, foreach, ranger, ks,
+        knitr
+VignetteBuilder: knitr
 NeedsCompilation: yes
 RoxygenNote: 6.1.1
+Packaged: 2019-10-22 21:42:22 UTC; leying

@@ -7,15 +7,15 @@
 mixtureEst(scores_test, scores_train, y, labels, zeta = 0.2, ...)
 }
 \arguments{
-\item{scores_test}{n by K score matrix where n is the size of test samples and K is the number of training classes.}
+\item{scores_test}{m by K score matrix where m is the size of test samples and K is the number of training classes.}
 
-\item{scores_train}{m by K score matrix where m is the size of training samples and K is the number of training classes.}
+\item{scores_train}{n by K score matrix where n is the size of training samples and K is the number of training classes.}
 
 \item{y}{label of the training samples.}
 
-\item{labels}{training class labels.}
+\item{labels}{K training class labels.}
 
-\item{zeta}{for each class k, we do not consider samples whose density is below zeta quantile of density distribution of training samples in class k.}
+\item{zeta}{for each class k, we do not consider samples whose density is below zeta quantile of density distribution of training samples in class k. By default, zeta = .2.}
 
 \item{...}{parameters to feed into function kde.}
 }
@@ -26,6 +26,7 @@ pi : estimated new mixture proportions.
 mixtureEst estimates the proportion of each of the training classes in the test samples based on density estimation form the function kde.
 }
 \examples{
+\dontrun{
 data(mnist);
 xtrain = mnist[['data']][['x']]; ytrain = mnist[['data']][['y']];
 xtest = mnist[['data_te']][['x']]; ytest=mnist[['data_te']][['y']];
@@ -45,4 +46,5 @@ prediction2=BCOPS.prediction(models = models2, xtrain2, ytrain2, labels , xtest2
 scores_test = prediction2$score_test; scores_train = prediction2$score_train
 pi2 = mixtureEst(scores_test, scores_train, ytrain2, labels = labels, zeta = .2, gridsize=512)
 pi = (pi1+pi2)/2
+}
 }

@@ -1,0 +1,441 @@
+---
+title: "BCOPS Vignette"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{bcops vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+### Leying Guan and Rob Tibshirani
+#### Yale October 1, 2019
+Introduction and installation
+
+> [Introduction](#intro)
+
+> [Installation](#install)
+
+Training and prediction with BCOPS.
+
+> [BCOPS](#bcops)
+
+Training BCOPS model.
+
+> [BCOPS.train](#train)
+
+
+Prediction set construction for new samples.
+
+> [BCOPS.prediction](#prediction)
+
+Evaluate the prediction quality given the true labels.
+
+> [evaluate.conformal](#evaluate)
+
+Estimating the distributional shift comparing training and test sample.
+
+> [mixtureEst](#mixEst)
+
+<a id="intro"></a>
+
+## Introduction
+
+BCOPS (balanced & conformal optimized prediction set) is a model-free and efficient method for doing classification in the presence of distributional shift or outliers. It does not assume anything about the relationship between the class label y and observed features x (p dimensional), and it makes decision based only on the following assumption:
+
+    Distribution of x given its class label y remain the same across training and test data
+    
+Further, it allows outliers and distributional shift by considering the following model
+
+$$
+f(x) = \sum^K_{k=1} \pi_k f_{k}(x)
+$$
+and
+$$
+f_{test}(x) = \sum^K_{k=1} \tilde{\pi}_k f_{k}(x)+\epsilon \cdot e(x)
+$$
+Here, we let $f(x)$ be the marginal density for $x$ in the training data, $f_k(x)$ be the density function of class $k$, and $\pi_k$ be the proportion of class $k$ in the training data, with $\sum^K_{k=1}\pi_k =1$. The test samples may differ from the training data in two ways:
+
+1. $\tilde\pi_k$, the proportions of each class in the test data, may be different from $\pi_k$, that in the training data.
+
+2. There may be non-negligible proportion $\epsilon \geq 0$ of outliers, whose density is characterized by $e(x)$. In other words, we may have $\sum^K_{k=1}\tilde\pi_k < 1$ and $\epsilon = 1-\sum^K_{k=1}\tilde\pi_k>0$.
+
+
+When both the labeled training data and the unlabeled test samples are available, BCOPS provides an asymptotic optimal decision rule for constructing prediction set where we can assign both multiple or 0 class labels to each of the test sample under some Assumptions. Moreover, it can always control the type I error defined as the mis-coverage of a given class label at a desired level: let $C(x)\in \{1,2,\ldots, K\}$ be the set of class labels we assign to x, we can use BCOPS to construct such $C(x)$, such that we always have
+$$
+ P_{k}(k\in C(x)) \geq 1-\alpha
+$$
+
+Details of BCOPS can be found in the [1]. Here, we merely describe the high level ideal of it.
+
+As a contrast to most classification methods, BCOPS do not build a classifier merely based on the labeled training data, instead, it will also use the unlabeled  test data to find an optimal strategy for classifying the test samples. More precisely:
+
+1. BCOPS decide whether to assign class label $k$ to a sample based on the following density ratio
+
+$$
+v_k(x) = \frac{f_k(x)}{f_{test}(x)+f_k(x)}
+$$
+The higher $v_k(x)$ is, the more willingly we are to assign label $k$ to $x$. The cut-off is calculated based on the idea of conformal inference, which guarantees finite sample coverage for any given label $k$.
+
+2. Density estimation suffers from increasing dimensionality. However, for most practical problems, we can usually approximate density ratio with properly chosen supervised learning algorithms if the underlying difference between two types of data is well-structured (the foundation of any supervised algorithm to work well in high dimension). Instead of learning the density, BCOPS will used any user preferred supervised learning algorithm to approximate $v_k(x)$, and this enables BCOPS to perform quite well in high dimension in many real data set.
+
+[1] Guan, Leying, and Rob Tibshirani. "Prediction and outlier detection in classification problems." arXiv preprint arXiv:1905.04396 (2019).
+
+<a id="install"></a>
+
+## Installation
+
+Like many other R packages, the simplest way to obtain `glmnet` is to install it directly from CRAN. Type the following command in R console:
+
+```{r, eval=FALSE}
+install.packages("bcops", repos = "https://cran.us.r-project.org")
+```
+
+Users may change the `repos` options depending on their locations and preferences. Other options such as the directories where to install the packages can be altered in the command. For more details, see `help(install.packages)`.
+
+Here the R package has been downloaded and installed to the default directories.
+
+The user can also install the package using source files in github by the following commands:
+
+library(devtools)
+
+install_github("LeyingGuan/BCOPS/bcops")
+
+## BCOPS
+
+<a id="bcops"></a>
+
+BCOPS function train and make prediction using BCOPS with a user specified classifer. For more flexibility with the arguments, the user can also choose to use BCOPS.train and BCOP.prediction to perform training and predicting in seperate steps.
+
+### Usage
+
+BCOPS.train(classifier, x, y, labels, xte, formula = FALSE, ...)
+
+#### Arguments
+
+* `classifier`: a user-specified classifier. Note that the classifier can either takes input as feature matrix x and response y, or a dataframe contains features and response and a formula.
+
+* `x1`: n1 by p feature matrix for the first fold of training data.
+
+* `y1`: length n1 class labels for the first fold of training data.
+
+* `xte1`: m1 by p feature matrix for the first fold of test data.
+
+* `x2`: n1 by p feature matrix for the first fold of training data.
+
+* `y2`: length n1 class labels for the first fold of training data.
+
+* `xte2`: m2 by p feature matrix for the first fold of test data.
+
+
+* `labels`: labels for the K training classes.
+
+* `formula`: boolean variable indicating if the classifier takes data argument as classifier(formula, data,...) or  classifier(x, y,...). The function ranger is an example of the former, and the function cv.glmnet is an example of the later.
+
+* `prediction_only`: boolean variable indicating whether predict(classifier,...) returns directly the predictions (TRUE) or need to be accessed by a specific name.
+
+* `name`: the name we can use to access the predictions. By default, name = "predictions".
+
+* `...`: other arguments depending on the classifier. Note the argument is applied to the augmented data by stacking x and xte together when building a binary classifier.
+
+### Values
+
+* `conformal.scores1`: The m1 by K conformal scores for the first fold of test samples xte1.
+
+* `conformal.scores2`: The m2 by K conformal scores for the second fold of test samples xte2.
+
+<a id="train"></a>
+
+### Examples
+
+data(mnist);
+
+xtrain = mnist[['data']][['x']]; ytrain = mnist[['data']][['y']];
+xtest = mnist[['data_te']][['x']]; ytest=mnist[['data_te']][['y']];
+
+########split the training and test data into two halfs for conformal prediction##############
+
+set.seed(123)
+
+foldid = sample(1:2, length(ytrain), replace = TRUE); foldid_te = sample(1:2,length(ytest), replace = TRUE)
+
+xtrain1 = xtrain[foldid==1,]; xtrain2 = xtrain[foldid==2,]; 
+
+ytrain1 = ytrain[foldid==1];ytrain2=ytrain[foldid==2]
+
+xtest1 = xtest[foldid_te ==1,]; xtest2 = xtest[foldid_te==2,];
+
+labels = sort(unique(ytrain))
+
+#########example using cv.glmnet##############
+
+ require(glmnet)
+ 
+ bcops1 = BCOPS(cv.glmnet, xtrain1, ytrain1, xtest1,
+                 xtrain2, ytrain2, xtest2, labels, formula = FALSE)
+                 
+#########example using random forest##########
+
+ require(ranger)
+ 
+ bcops2 = BCOPS(ranger, xtrain1, ytrain1, xtest1, xtrain2, ytrain2, xtest2, labels, formula = TRUE)
+ 
+
+## BCOPS.train
+
+BCOPS.train takes in a set of training samples (x, y) and a set of unlabeled test set xte to estimate the score function using any classifier the user prefers.  Note that the user needs to split the training and the test data set into two folds, and BCOPS.train takes into data corresponding to one fold only to train a score function for prediction in the other fold, this sample splitting step is required to achieve finite sample coverage at any given level.
+
+### Usage
+
+BCOPS.train(classifier, x, y, labels, xte, formula = FALSE, ...)
+
+#### Arguments
+
+* `classifier`: a user-specified classifier. Note that the classifier can either takes input as feature matrix x and response y, or a dataframe contains features and response and a formula.
+
+* `x`: n by p feature matrix for the training data to be used in constructing $v_k(x)$.
+
+* `y`: length n class labels for the training data to be used in constructing $v_k(x)$.
+
+* `labels`: labels for the K training classes.
+
+* `xte`: m by p features for the test data to be used in constructing $v_k(x)$.
+
+* `formula`: boolean variable indicating if the classifier takes data argument as classifier(formula, data,...) or  classifier(x, y,...). The function ranger is an example of the former, and the function cv.glmnet is an example of the later.
+
+* `...`: other arguments for classifiers when performing binary classification to learn $v_k(x)$, for example, weights argument to reweight samples.
+
+#### Value
+* a list trained models that is used for predict the BCOPs score for each new observation.
+
+### Examples
+data(mnist); 
+
+xtrain = mnist[['data']][['x']]; ytrain = mnist[['data']][['y']]; 
+xtest = mnist[['data_te']][['x']]; ytest=mnist[['data_te']][['y']]; 
+
+#########data splitting##############
+
+set.seed(123)
+
+foldid = sample(1:2, length(ytrain), replace = TRUE); foldid_te = sample(1:2,length(ytest), replace = TRUE)
+
+xtrain1 = xtrain[foldid==1,]; xtrain2 = xtrain[foldid==2,]; 
+
+ytrain1 = ytrain[foldid==1]; ytrain2=ytrain[foldid==2]
+
+xtest1 = xtest[foldid_te ==1,]; xtest2 = xtest[foldid_te==2,]; 
+
+labels = sort(unique(ytrain)) 
+
+#########example using cv.glmnet##############
+
+require(glmnet)
+
+models2 = BCOPS.train(cv.glmnet, xtrain2, ytrain2, labels, xtest2)
+
+#########example using random forest##########
+
+require(ranger)
+
+models1 = BCOPS.train(ranger, xtrain2, ytrain2, labels, xtest2, formula = TRUE)
+
+
+<a id="prediction"></a>
+
+## BCOPS.prediction
+
+This function that takes in models produced from BCOPS.train and apply it and conformal inference to new training and test samples. 
+
+### Usage
+
+BCOPS.prediction(models, x, y, labels, xte, formula = FALSE, prediction_only = TRUE, name = "predictions")
+  
+### Arguments
+
+* `models`: a list of models calculating the predicted $v_k(x)$ for each class, it is an object from BCOPS.train. 
+
+* `x`: n by p feature matrix for the training data to be used in conformal inference.
+
+* `y`: length n class labels for the training data to be used in the conformal inference.
+
+* `labels`: Labels for the K classes when applying BCOPS.train.
+
+* `xte`: m by p features for the test data to be used in the conformal inference.
+
+* `formula`: boolean variable indicating if the classifier takes data argument as classifier(formula, data,...) or  classifier(x, y,...). The function ranger is an example of the former, and the function cv.glmnet is an example of the later.
+
+* `prediction_only `: boolean variable indicating whether predict(classifier,...) returns directly the predictions (TRUE) or need to be accessed by a specific name.
+
+* `name`: the name we can use to access the predictions. By default, name = "predictions".
+
+### Value
+
+* `prediction.conformal`: a m by K matrix for m test samples, it is the conformal constructed p-value for a test sample not from each of the K classes. If we want to control the type I error at alpha, then, we assign all class labels whose conformal p-value is no smaller than alpha to the test samples.
+
+* `scores_test`: a m by K matrix for m test samples and K classes, each entry is the value evaluated at a test sample using score function for a training class. 
+
+* `scores_train`: a n by K matrix for n training samples, each entry is the value evaluated at a training sample using score function for a training class. 
+
+
+### Examples
+
+data(mnist); 
+
+xtrain = mnist[['data']][['x']]; ytrain = mnist[['data']][['y']]; 
+xtest = mnist[['data_te']][['x']]; ytest=mnist[['data_te']][['y']]; 
+
+#########data splitting##############
+
+set.seed(123)
+
+foldid = sample(1:2, length(ytrain), replace = TRUE); foldid_te = sample(1:2,length(ytest), replace = TRUE)
+
+xtrain1 = xtrain[foldid==1,]; xtrain2 = xtrain[foldid==2,]; 
+
+ytrain1 = ytrain[foldid==1]; ytrain2=ytrain[foldid==2]
+
+xtest1 = xtest[foldid_te ==1,]; xtest2 = xtest[foldid_te==2,]; 
+
+labels = sort(unique(ytrain)) 
+
+#########example using cv.glmnet##############
+
+require(glmnet)
+models1 = BCOPS.train(cv.glmnet, xtrain2, ytrain2, labels, xtest2)
+
+prediction.conformal1 = BCOPS.prediction(models = models1, xtrain1, ytrain1, labels , xtest1)
+
+#########example using random forest##########
+
+require(ranger)
+models1 = BCOPS.train(ranger, xtrain2, ytrain2, labels, xtest2, formula = TRUE)
+
+prediction.conformal1 = BCOPS.prediction(models = models1, xtrain1, ytrain1, labels , xtest1, formula = TRUE, prediction_only = FALSE)
+ 
+<a id="evaluate"></a>
+
+
+  
+## evaluate.conformal
+
+This function evaluate the predictions from BCOPS.prediction.
+
+### Usage
+
+evaluate.conformal(prediction, yte, labels, alpha = 0.05)
+
+### Arguments
+
+*`prediction`: the m by K prediction matrix containing the constructed conformal p-value for m test samples and K training classes.
+
+*`yte`: class labels for the test samples.
+
+*`labels`: the K class labels for the training samples.
+
+*`alpha`: the targeted type I error.
+
+### Value
+
+* a result table with the columns being the classes in the test samples, and the rows being the classes in the training samples. The entry at row j and column k represents the percent of samples in class j assigned label k. 
+
+### Examples
+
+data(mnist); 
+
+xtrain = mnist[['data']][['x']]; ytrain = mnist[['data']][['y']]; 
+xtest = mnist[['data_te']][['x']]; ytest=mnist[['data_te']][['y']]; 
+#########data splitting##############
+
+set.seed(123)
+
+foldid = sample(1:2, length(ytrain), replace = TRUE); foldid_te = sample(1:2,length(ytest), replace = TRUE)
+
+xtrain1 = xtrain[foldid==1,]; xtrain2 = xtrain[foldid==2,]; 
+
+ytrain1 = ytrain[foldid==1]; ytrain2=ytrain[foldid==2]
+
+xtest1 = xtest[foldid_te ==1,]; xtest2 = xtest[foldid_te==2,]; 
+
+labels = sort(unique(ytrain)) 
+
+#########example using ranger##############
+
+bcops = BCOPS(ranger, xtrain1, ytrain1, xtest1, xtrain2, ytrain2, xtest2, labels, formula = TRUE)
+
+prediction.conformal = matrix(NA, ncol = length(labels), nrow = length(ytest))
+
+prediction.conformal[foldid_te==1,] = bcops[[1]];
+
+prediction.conformal[foldid_te==2,] = bcops[[2]];
+
+evaluate.conformal(prediction.conformal, ytest, labels, 0.05)
+ 
+ <a id="mixEst"></a>
+ 
+## mixtureEst
+
+mixtureEst estimates the proportion of each of the training classes in the test samples based on density estimation form the function kde.
+
+### Usage
+
+mixtureEst(scores_test, scores_train, y, labels , zeta = .2, ...)
+
+### Arguments
+
+* `scores_test`: m by K score matrix where m is the size of test samples and K is the number of training classes. 
+
+* `scores_train`: n by K score matrix where n is the size of training samples and K is the number of training classes.
+
+* `y`: labels of the training samples.
+
+* `labels`: K training class labels.
+
+* `zeta`: for each class k, we do not consider samples whose density is below zeta quantile of density distribution of training samples in class k. By default, zeta = .2.
+
+* `...` parameters to feed into density estimation function kde.
+
+### Values
+
+* `pi`: estimated new mixture proportions.
+
+### Examples
+
+data(mnist);
+
+xtrain = mnist[['data']][['x']]; ytrain = mnist[['data']][['y']];
+xtest = mnist[['data_te']][['x']]; ytest=mnist[['data_te']][['y']];
+
+########split the training and test data into two halves for conformal prediction##############
+
+set.seed(123)
+
+foldid = sample(1:2, length(ytrain), replace = TRUE); foldid_te = sample(1:2,length(ytest), replace = TRUE)
+
+xtrain1 = xtrain[foldid==1,]; xtrain2 = xtrain[foldid==2,]; 
+
+ytrain1 = ytrain[foldid==1]; ytrain2=ytrain[foldid==2]
+
+xtest1 = xtest[foldid_te ==1,]; xtest2 = xtest[foldid_te==2,];
+
+labels = sort(unique(ytrain))
+
+require(ranger)
+
+models1 = BCOPS.train(ranger, xtrain2, ytrain2, labels, xtest2, formula = TRUE)
+
+models2 = BCOPS.train(ranger, xtrain1, ytrain1, labels, xtest1, formula = TRUE)
+
+prediction1=BCOPS.prediction(models = models1, xtrain1, ytrain1, labels , xtest1, formula = TRUE, prediction_only = FALSE)
+
+scores_test = prediction1\$score_test; scores_train = prediction1\$score_train
+
+pi1 = mixtureEst(scores_test, scores_train, ytrain1, labels = labels, zeta = .2, gridsize=512)
+
+prediction2=BCOPS.prediction(models = models2, xtrain2, ytrain2, labels , xtest2, formula = TRUE, prediction_only = FALSE)
+
+scores_test = prediction2\$score_test; scores_train = prediction2\$score_train
+
+pi2 = mixtureEst(scores_test, scores_train, ytrain2, labels = labels, zeta = .2, gridsize=512)
+
+pi = (pi1+pi2)/2
+ 

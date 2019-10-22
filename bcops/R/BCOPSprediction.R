@@ -1,16 +1,17 @@
 #' BCOPS prediction function
-#' @param models Trained models for conformal prediction.
-#' @param x features for the training data used to perform the conformal inference.
-#' @param y class labels from the training data used to perform the conformal inference.
-#' @param labels labels for the K classes.
-#' @param xte featuers for the test data to perform the conformal prediction for.
+#' @param models a list of models calculating the predicted $v_k(x)$ for each class, it is an object from BCOPS.train. 
+#' @param x n by p feature matrix for the training data to be used in conformal inference.
+#' @param y length n class labels for the training data to be used in the conformal inference.
+#' @param labels Labels for the K classes when applying BCOPS.train.
+#' @param xte m by p features for the test data to be used in the conformal inference.
 #' @param formula boolean variable indicating if the classifier takes data argument as classifier(formula, data,...) or  classifier(x, y,...). The function ranger is an example of the former, and the function cv.glmnet is an example of the later.
-#' @param prediction_only boolean variable indicating whether predict(classifier,...) returns directly the predictions (TRUE) or need to be accessed by a pecific name.
-#' @param name the name we can use to access the predictions. By defatul, name = "predictions".
-#' @return prediction.conformal a n by K matrix for n test samples, it is the conformal constructed p-value for a test sample not from each of the K classes. If we want to control the type I error at alpha, then, we assign all class labels whose conformal p-value is no smaller than alpha to the test samples.
-#' @return scores_test a n by K matrix for n test samples and K classes, each entry is the value evaluated at a test sample using score function for a training class. 
-#' @return scores_train a m by K matrix for m training samples, each entry is the value evaluated at a training sample using score function for a training class. 
+#' @param prediction_only boolean variable indicating whether predict(classifier,...) returns directly the predictions (TRUE) or need to be accessed by a specific name.
+#' @param name the name we can use to access the predictions. By default, name = "predictions".
+#' @return prediction.conformal a m by K matrix for m test samples, it is the conformal constructed p-value for a test sample not from each of the K classes. If we want to control the type I error at alpha, then, we assign all class labels whose conformal p-value is no smaller than alpha to the test samples.
+#' @return scores_test a m by K matrix for m test samples and K classes, each entry is the value evaluated at a test sample using score function for a training class. 
+#' @return scores_train a n by K matrix for n training samples, each entry is the value evaluated at a training sample using score function for a training class. 
 #' @examples
+#' \dontrun{
 #' data(mnist);
 #' xtrain = mnist[['data']][['x']]; ytrain = mnist[['data']][['y']];
 #' xtest = mnist[['data_te']][['x']]; ytest=mnist[['data_te']][['y']];
@@ -26,18 +27,13 @@
 #'  prediction.conformal1 = BCOPS.prediction(models = models1, xtrain1, ytrain1, labels , xtest1)$prediction.conformal
 #'  models2 = BCOPS.train(cv.glmnet, xtrain1, ytrain1, labels, xtest1)
 #'  prediction.conformal2 = BCOPS.prediction(models = models2, xtrain2, ytrain2, labels , xtest2)$prediction.conformal
-#'  prediction.conformal = matrix(NA, ncol = length(labels), nrow = length(ytest))
-#'  prediction.conformal[foldid_te==1,] = prediction.conformal1;prediction.conformal[foldid_te==2,] = prediction.conformal2;
-#'  evaluate.conformal(prediction.conformal, ytest, labels, 0.05)
 #' #########example using random forest##########
 #'  require(ranger)
 #'  models1 = BCOPS.train(ranger, xtrain2, ytrain2, labels, xtest2, formula = TRUE)
 #'  prediction.conformal1 = BCOPS.prediction(models = models1, xtrain1, ytrain1, labels , xtest1, formula = TRUE, prediction_only = FALSE)$prediction.conformal
 #'  models2 = BCOPS.train(ranger, xtrain1, ytrain1, labels, xtest1, formula = TRUE)
 #'  prediction.conformal2 = BCOPS.prediction(models = models2, xtrain2, ytrain2, labels , xtest2,formula = TRUE, prediction_only = FALSE)$prediction.conformal
-#'  prediction.conformal = matrix(NA, ncol = length(labels), nrow = length(ytest))
-#'  prediction.conformal[foldid_te==1,] = prediction.conformal1;prediction.conformal[foldid_te==2,] = prediction.conformal2;
-#'  evaluate.conformal(prediction.conformal, ytest, labels, 0.05)
+#'  }
 #' @export
 BCOPS.prediction <- function(models, x, y, labels, xte, formula = FALSE, prediction_only = TRUE, name = "predictions"){
   K = length(labels)
