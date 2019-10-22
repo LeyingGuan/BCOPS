@@ -12,15 +12,17 @@ library(bcops)
 or download the zip file bcops_0.1.0.tar.gz and install it in R locally.
 ## Overview
 
-There are 4 functions that the user can access in this package:
+Users  can access the following functions in this package:
 
-BCOPS.train
+BCOPS: for training and prediction
 
-BCOPS.prediction
+evaluate.conformal: for evaluation
 
-evaluate.conformal
+mixtureEst: for estimating distributional shift
 
-mixtureEst
+BCOPS.train: for more flexible training
+
+BCOPS.prediction: for prediction
 
 Details of how to use the functions can be found in the help page coming with each of the function in R, demonstrated with detailed examples.
 
